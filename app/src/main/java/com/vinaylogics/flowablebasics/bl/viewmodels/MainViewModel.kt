@@ -2,30 +2,25 @@ package com.vinaylogics.flowablebasics.bl.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.FlowPreview
+import com.vinaylogics.flowablebasics.DispatcherProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.buffer
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.conflate
-import kotlinx.coroutines.flow.flatMap
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.fold
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.reduce
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val dispatchers: DispatcherProvider
+) : ViewModel() {
 
     val countDownFlow = flow<Int> {
-        val startingValue = 10
+        val startingValue = 5
         var currentValue = startingValue
         emit(startingValue)
         while (currentValue > 0) {
@@ -33,7 +28,7 @@ class MainViewModel : ViewModel() {
             currentValue--
             emit(currentValue)
         }
-    }
+    }.flowOn(dispatchers.main)
 
     private val _stateFlow = MutableStateFlow(0)
     val stateFlow = _stateFlow.asStateFlow()
@@ -44,14 +39,14 @@ class MainViewModel : ViewModel() {
     init {
         squareNumber(3)
         collectFlow()
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.main) {
             sharedFlow.collect{
                 delay(2.seconds)
                 println("FIRST FLOW: The receive number is $it")
             }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.main) {
             sharedFlow.collect{
                 delay(3.seconds)
                 println("SECOND FLOW: The receive number is $it")
@@ -65,7 +60,7 @@ class MainViewModel : ViewModel() {
     // [1,2,1,2,3]
 
     fun squareNumber(number: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.main) {
             _sharedFlow.emit(number * number)
         }
     }

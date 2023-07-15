@@ -29,12 +29,6 @@ class MainActivity : ComponentActivity() {
             FlowableBasicsTheme {
                 val viewModel = viewModel<MainViewModel>()
                val count = viewModel.stateFlow.collectAsState(initial = 0)
-                LaunchedEffect(key1 = true) {
-                    viewModel.sharedFlow.collect {number ->
-
-
-                    }
-                }
                 Box(modifier=Modifier.fillMaxSize()){
                    Button(onClick = {
                        viewModel.incrementCounter()

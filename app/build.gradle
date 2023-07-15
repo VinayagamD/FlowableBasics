@@ -94,4 +94,20 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:$arch_version"
     // optional - Test helpers for Lifecycle runtime
     testImplementation "androidx.lifecycle:lifecycle-runtime-testing:$lifecycle_version"
+
+    // testing
+    // https://mvnrepository.com/artifact/app.cash.turbine/turbine
+    testImplementation 'app.cash.turbine:turbine:1.0.0'
+    // https://mvnrepository.com/artifact/com.google.truth/truth
+    testImplementation 'com.google.truth:truth:1.1.5'
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-test
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2'
+
+    //coroutine
+    def coroutine_version = "1.7.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+
+
+
 }
