@@ -7,6 +7,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flatMap
 import kotlinx.coroutines.flow.flatMapConcat
@@ -52,11 +53,11 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             // buffer will always run in different coroutine
             // conflate alternate to buffer
+            // collectLatest alternate to buffer
             flow.onEach {
                 println("FLOW: $it is delivered")
             }
-                .conflate()
-                .collect {
+                .collectLatest {
                     println("FLOW: Now eating $it")
                     delay(1.5.seconds)
                     println("FLOW: finish eating $it")
