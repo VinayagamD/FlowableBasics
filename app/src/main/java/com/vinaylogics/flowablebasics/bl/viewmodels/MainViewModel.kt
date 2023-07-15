@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.flow.reduce
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -27,11 +28,11 @@ class MainViewModel : ViewModel() {
 
     private fun collectFlow() {
         viewModelScope.launch {
-            val reduceResult = countDownFlow
-                .reduce { accumulator, value ->
+            val foldResult = countDownFlow
+                .fold(100) { accumulator, value ->
                     accumulator + value
                 }
-            println("Reduce result is $reduceResult")
+            println("Fold result is $foldResult")
         }
     }
 }
