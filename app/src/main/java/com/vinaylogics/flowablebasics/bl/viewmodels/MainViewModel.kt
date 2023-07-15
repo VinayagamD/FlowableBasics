@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.collect
@@ -36,13 +38,37 @@ class MainViewModel : ViewModel() {
     private val _stateFlow = MutableStateFlow(0)
     val stateFlow = _stateFlow.asStateFlow()
 
+    private val _sharedFlow = MutableSharedFlow<Int>(replay = 5)
+    val sharedFlow = _sharedFlow.asSharedFlow()
+
     init {
+        squareNumber(3)
         collectFlow()
+        viewModelScope.launch {
+            sharedFlow.collect{
+                delay(2.seconds)
+                println("FIRST FLOW: The receive number is $it")
+            }
+        }
+
+        viewModelScope.launch {
+            sharedFlow.collect{
+                delay(3.seconds)
+                println("SECOND FLOW: The receive number is $it")
+            }
+        }
+
     }
 
     // Flattening example
     // [[1,2],[1,2,3]]
     // [1,2,1,2,3]
+
+    fun squareNumber(number: Int) {
+        viewModelScope.launch {
+            _sharedFlow.emit(number * number)
+        }
+    }
 
     fun incrementCounter(){
         _stateFlow.value += 1
