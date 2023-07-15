@@ -18,6 +18,8 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+
     }
 
     buildTypes {
@@ -29,6 +31,13 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+    }
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            useJUnitPlatform()
+        }
+
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17
@@ -60,7 +69,7 @@ dependencies {
     implementation 'androidx.compose.ui:ui-graphics'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     implementation 'androidx.compose.material3:material3'
-    testImplementation 'junit:junit:4.13.2'
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation platform('androidx.compose:compose-bom:2023.06.01')
@@ -68,6 +77,15 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+
+    // Junit 5 dependencies
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
+    def junit_version = "5.9.3"
+    testImplementation "org.junit.jupiter:junit-jupiter:$junit_version"
+    testImplementation "org.junit.vintage:junit-vintage-engine:$junit_version"
+    androidTestRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_version"
+    androidTestImplementation "org.junit.jupiter:junit-jupiter:$junit_version"
+
 
 
     def lifecycle_version = '2.6.1'
