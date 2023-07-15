@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flatMap
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
@@ -35,11 +36,7 @@ class MainViewModel : ViewModel() {
 
     @OptIn(FlowPreview::class)
     private fun collectFlow() {
-        val flow1 = flow {
-            emit(1)
-            delay(0.5.seconds)
-            emit(2)
-        }
+        val flow1 = (1..5).asFlow()
 
         viewModelScope.launch {
             flow1.flatMapConcat { value ->
